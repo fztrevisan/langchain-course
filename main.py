@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
+from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 
 from input_data import INFORMATION
@@ -23,11 +24,17 @@ Based on the info provided, create:
         input_variables=["information"], template=summary_template_str
     )
 
-    llm = ChatOpenAI(
+    # llm = ChatOpenAI(
+    #     temperature=0,
+    #     model="gpt-4o",
+    #     base_url="https://models.inference.ai.azure.com",
+    #     api_key=os.getenv("GITHUB_GPT_PAT"),
+    # )
+    # models: qwen3.5:4b-mlx | gemma4:e4b-mlx
+    llm = ChatOllama(
         temperature=0,
-        model="gpt-4o",
-        base_url="https://models.inference.ai.azure.com",
-        api_key=os.getenv("GITHUB_GPT_PAT"),
+        model="gemma4:e4b-mlx",
+        reasoning=False,
     )
     chain = summary_prompt_template | llm
     response = chain.invoke(input={"information": INFORMATION})
